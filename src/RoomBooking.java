@@ -9,6 +9,7 @@ public class RoomBooking {
         this.rooms = new ArrayList<>();
     }
 
+    // free rooms can be added only on lecturer accounts
     public void addRoom(Room room) {
         rooms.add(room);
     }
