@@ -17,7 +17,7 @@ public class RoomBookingTest {
     @BeforeEach
     void setUp() {
         // Create a user object with some test data
-        user = new User(1, "John Doe", "johndoe@example.com", "student", "john.jpg");
+        user = new User(1, "Killian Golds", "KG@example.com", "student", "Killian.jpg");
         // Create a room object with some test data
         room = new Room(1, "computer lab", "SETU Campus 1", 2);
         // Create a start time and end time for a study group

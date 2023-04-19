@@ -17,9 +17,9 @@ class StudyGroupTest {
     // Before each test, initialize the instance variables
     @BeforeEach
     void setUp() {
-        organizer = new User(1, "Organizer", "organizer@example.com", "student", "organizer.jpg");
-        participant1 = new User(2, "Participant1", "participant1@example.com", "student", "participant1.jpg");
-        participant2 = new User(3, "Participant2", "participant2@example.com", "student", "participant2.jpg");
+        organizer = new User(1, "Alex Fann", "alex@example.com", "student", "alex.jpg");
+        participant1 = new User(2, "Killian Golds", "killian@example.com", "student", "killian.jpg");
+        participant2 = new User(3, "Dean Sinnot", "dean@example.com", "student", "dean.jpg");
         Room room = new Room(1, "Computer Lab", "SETU Campus 1", 2);
         LocalDateTime startTime = LocalDateTime.now().plusDays(1);
         LocalDateTime endTime = startTime.plusHours(2);
@@ -29,8 +29,8 @@ class StudyGroupTest {
     // Test adding a participant to the study group
     @ParameterizedTest
     @CsvSource({
-            "1, participant1@example.com",
-            "2, participant2@example.com"
+            "1, killian@example.com",
+            "2, dean@example.com"
     })
     void testAddParticipant(int userId, String email) {
         User participant = new User(userId, "Participant", email, "student", "participant.jpg");
@@ -41,8 +41,8 @@ class StudyGroupTest {
     // Test adding a participant when the study group is already full
     @ParameterizedTest
     @CsvSource({
-            "1, participant1@example.com",
-            "2, participant2@example.com",
+            "1, killian@example.com",
+            "2, dean@example.com",
             "3, participant3@example.com"
     })
     void testAddParticipantWhenFull(int userId, String email) {
@@ -56,8 +56,8 @@ class StudyGroupTest {
     // Test removing a participant from the study group
     @ParameterizedTest
     @CsvSource({
-            "1, participant1@example.com",
-            "2, participant2@example.com"
+            "1, killian@example.com",
+            "2, dean@example.com"
     })
     void testRemoveParticipant(int userId, String email) {
         User participant = new User(userId, "Participant", email, "student", "participant.jpg");
@@ -69,8 +69,8 @@ class StudyGroupTest {
     // Test adding a participant to the waitlist
     @ParameterizedTest
     @CsvSource({
-            "1, participant1@example.com",
-            "2, participant2@example.com",
+            "1, killian@example.com",
+            "2, dean@example.com",
             "3, participant3@example.com"
     })
     void testAddToWaitlist(int userId, String email) {
@@ -84,8 +84,8 @@ class StudyGroupTest {
     // Test removing a participant from the waitlist
     @ParameterizedTest
     @CsvSource({
-            "1, participant1@example.com",
-            "2, participant2@example.com",
+            "1, killian@example.com",
+            "2, dean@example.com",
             "3, participant3@example.com"
     })
     void testRemoveFromWaitlist(int userId, String email) {
