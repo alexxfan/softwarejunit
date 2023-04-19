@@ -1,41 +1,39 @@
-
 public class Room {
-
-    private String name;
+    private int roomId;
+    private String roomType; // "computer lab" or "regular room"
+    private String location;
     private int capacity;
-    private boolean available;
-    private String bookingName;
+    private boolean availability;
 
-    public Room(String name, int capacity) {
-        this.name = name;
+    public Room(int roomId, String roomType, String location, int capacity) {
+        this.roomId = roomId;
+        this.roomType = roomType;
+        this.location = location;
         this.capacity = capacity;
-        this.available = true;
-        this.bookingName = null;
+        this.availability = true;
     }
 
-    public String getName() {
-        return name;
+    public int getRoomId() {
+        return roomId;
+    }
+
+    public String getRoomType() {
+        return roomType;
+    }
+
+    public String getLocation() {
+        return location;
     }
 
     public int getCapacity() {
         return capacity;
     }
 
-    public boolean isAvailable() {
-        return available;
+    public boolean getAvailability() {
+        return availability;
     }
 
-    public String getBookingName() {
-        return bookingName;
-    }
-
-    public void book(String bookingName) {
-        this.bookingName = bookingName;
-        this.available = false;
-    }
-
-    public void cancelBooking() {
-        this.bookingName = null;
-        this.available = true;
+    public void setAvailability(boolean availability) {
+        this.availability = availability;
     }
 }

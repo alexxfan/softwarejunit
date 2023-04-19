@@ -1,37 +1,72 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
 
 public class RoomBooking {
+    private int bookingId;
+    private User user; // for individual user bookings
+    private StudyGroup studyGroup; // for study group bookings
+    private Room room;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
 
-    private List<Room> rooms;
-
-    public RoomBooking() {
-        this.rooms = new ArrayList<>();
+    // Constructor for individual user bookings
+    public RoomBooking(int bookingId, User user, Room room, LocalDateTime startTime, LocalDateTime endTime) {
+        this.bookingId = bookingId;
+        this.user = user;
+        this.studyGroup = null;
+        this.room = room;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
-    public void addRoom(Room room) {
-        rooms.add(room);
+    // Constructor for study group bookings
+    public RoomBooking(int bookingId, StudyGroup studyGroup, Room room, LocalDateTime startTime, LocalDateTime endTime) {
+        this.bookingId = bookingId;
+        this.user = null;
+        this.studyGroup = studyGroup;
+        this.room = room;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
-    public boolean bookRoom(Room room, String bookingName) {
-        if (room.isAvailable()) {
-            room.book(bookingName);
-            return true;
+    public int getBookingId() {
+        return bookingId;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public Room getRoom() {
+        return room;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public StudyGroup getStudyGroup() {
+        return studyGroup;
+    }
+
+    public void bookRoom() {
+        if (room.getAvailability()) {
+            room.setAvailability(false);
+            System.out.println("Room successfully booked!");
         } else {
-            return false;
+            System.out.println("Room is not available for booking.");
         }
     }
 
-    public boolean cancelBooking(Room room) {
-        if (!room.isAvailable()) {
-            room.cancelBooking();
-            return true;
+    public void cancelBooking() {
+        if (!room.getAvailability()) {
+            room.setAvailability(true);
+            System.out.println("Booking successfully cancelled!");
         } else {
-            return false;
+            System.out.println("Room is not currently booked.");
         }
-    }
-
-    public List<Room> getRooms() {
-        return rooms;
     }
 }

@@ -20,7 +20,7 @@ class StudyGroupTest {
         organizer = new User(1, "Organizer", "organizer@example.com", "student", "organizer.jpg");
         participant1 = new User(2, "Participant1", "participant1@example.com", "student", "participant1.jpg");
         participant2 = new User(3, "Participant2", "participant2@example.com", "student", "participant2.jpg");
-        Room room = new Room("Computer Lab", 2);
+        Room room = new Room(1, "Computer Lab", "SETU Campus 1", 2);
         LocalDateTime startTime = LocalDateTime.now().plusDays(1);
         LocalDateTime endTime = startTime.plusHours(2);
         studyGroup = new StudyGroup(1, "Study Group 1", room, startTime, endTime, 2, organizer);

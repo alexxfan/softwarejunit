@@ -1,47 +1,85 @@
-//import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+
+import java.time.LocalDateTime;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class RoomBookingTest {
 
-    private RoomBooking roomBooking;
+    // Declare member variables
+    private User user;
+    private StudyGroup studyGroup;
+    private Room room;
 
+    // This method is run before each test method
     @BeforeEach
-    public void setUp() {
-        // Create a new instance of RoomBooking before each test
-        roomBooking = new RoomBooking();
+    void setUp() {
+        // Create a user object with some test data
+        user = new User(1, "John Doe", "johndoe@example.com", "student", "john.jpg");
+        // Create a room object with some test data
+        room = new Room(1, "computer lab", "SETU Campus 1", 2);
+        // Create a start time and end time for a study group
+        LocalDateTime startTime = LocalDateTime.parse("2023-04-20T10:00:00");
+        LocalDateTime endTime = LocalDateTime.parse("2023-04-20T12:00:00");
+        // Create a study group object with some test data
+        studyGroup = new StudyGroup(1, "Group 1", room, startTime, endTime, 2, user);
     }
 
-    @Test
-    public void testAddRoom() {
-        // Test that a new room can be added
-        int initialSize = roomBooking.getRooms().size();
-        roomBooking.addRoom(new Room("Room A", 10));
-        int newSize = roomBooking.getRooms().size();
-        Assertions.assertEquals(initialSize + 1, newSize, "New room not added");
+    @ParameterizedTest
+    @CsvSource({
+            "1, computer lab, Campus 1, 2, 2023-04-20T10:00:00, 2023-04-20T12:00:00",
+            "2, regular room, Campus 2, 4, 2023-04-21T14:00:00, 2023-04-21T16:00:00"
+    })
+    void testBookRoomIndividual(int roomId, String roomType, String location, int capacity, String start, String end) {
+        Room room = new Room(roomId, roomType, location, capacity);
+        LocalDateTime startTime = LocalDateTime.parse(start);
+        LocalDateTime endTime = LocalDateTime.parse(end);
+        RoomBooking roomBooking = new RoomBooking(1, user, room, startTime, endTime);
+        roomBooking.bookRoom();
+        assertFalse(room.getAvailability());
     }
 
-    @Test
-    public void testBookRoom() {
-        // Test that a room can be booked
-        Room room = new Room("Room B", 8);
-        roomBooking.addRoom(room);
-        boolean isBooked = roomBooking.bookRoom(room, "John");
-        Assertions.assertTrue(isBooked, "Room should be available for booking");
-        Assertions.assertFalse(room.isAvailable(), "Room should be booked");
-        Assertions.assertEquals("John", room.getBookingName(), "Wrong name of the person who booked the room");
+    @ParameterizedTest
+    @CsvSource({
+            "1, computer lab, Campus 1, 2, 2023-04-20T10:00:00, 2023-04-20T12:00:00",
+            "2, regular room, Campus 2, 4, 2023-04-21T14:00:00, 2023-04-21T16:00:00"
+    })
+    void testCancelBookingIndividual(int roomId, String roomType, String location, int capacity, String start, String end) {
+        Room room = new Room(roomId, roomType, location, capacity);
+        LocalDateTime startTime = LocalDateTime.parse(start);
+        LocalDateTime endTime = LocalDateTime.parse(end);
+        RoomBooking roomBooking = new RoomBooking(1, user, room, startTime, endTime);
+        roomBooking.cancelBooking();
+        assertTrue(room.getAvailability());
     }
 
-    @Test
-    public void testCancelBooking() {
-        // Test that a booking can be cancelled
-        Room room = new Room("Room C", 6);
-        roomBooking.addRoom(room);
-        roomBooking.bookRoom(room, "Jane");
-        boolean isCancelled = roomBooking.cancelBooking(room);
-        Assertions.assertTrue(isCancelled, "Booking should be cancelled");
-        Assertions.assertTrue(room.isAvailable(), "Room should be available");
-        Assertions.assertNull(room.getBookingName(), "Booking name should be null");
+    @ParameterizedTest
+    @CsvSource({
+            "1, computer lab, Campus 1, 2, 2023-04-20T10:00:00, 2023-04-20T12:00:00",
+            "2, regular room, Campus 2, 4, 2023-04-21T14:00:00, 2023-04-21T16:00:00"
+    })
+    void testBookRoomStudyGroup(int roomId, String roomType, String location, int capacity, String start, String end) {
+        Room room = new Room(roomId, roomType, location, capacity);
+        LocalDateTime startTime = LocalDateTime.parse(start);
+        LocalDateTime endTime = LocalDateTime.parse(end);
+        RoomBooking roomBooking = new RoomBooking(1, studyGroup, room, startTime, endTime);
+        roomBooking.bookRoom();
+        assertFalse(room.getAvailability());
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "1, computer lab, Campus 1, 2, 2023-04-20T10:00:00, 2023-04-20T12:00:00",
+            "2, regular room, Campus 2, 4, 2023-04-21T14:00:00, 2023-04-21T16:00:00"
+    })
+    void testCancelBookingStudyGroup(int roomId, String roomType, String location, int capacity, String start, String end) {
+        Room room = new Room(roomId, roomType, location, capacity);
+        LocalDateTime startTime = LocalDateTime.parse(start);
+        LocalDateTime endTime = LocalDateTime.parse(end);
+        RoomBooking roomBooking = new RoomBooking(1, studyGroup, room, startTime, endTime);
+        roomBooking.cancelBooking();
+        assertTrue(room.getAvailability());
     }
 }
