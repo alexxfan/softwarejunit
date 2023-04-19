@@ -1,6 +1,9 @@
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+
 import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class StudyGroupTest {
@@ -24,54 +27,93 @@ class StudyGroupTest {
     }
 
     // Test adding a participant to the study group
-    @Test
-    void testAddParticipant() {
-        assertTrue(studyGroup.addParticipant(participant1));
+    @ParameterizedTest
+    @CsvSource({
+            "1, participant1@example.com",
+            "2, participant2@example.com"
+    })
+    void testAddParticipant(int userId, String email) {
+        User participant = new User(userId, "Participant", email, "student", "participant.jpg");
+        assertTrue(studyGroup.addParticipant(participant));
         assertEquals(1, studyGroup.getParticipants().size());
     }
 
     // Test adding a participant when the study group is already full
-    @Test
-    void testAddParticipantWhenFull() {
+    @ParameterizedTest
+    @CsvSource({
+            "1, participant1@example.com",
+            "2, participant2@example.com",
+            "3, participant3@example.com"
+    })
+    void testAddParticipantWhenFull(int userId, String email) {
+        User participant = new User(userId, "Participant", email, "student", "participant.jpg");
         studyGroup.addParticipant(participant1);
         studyGroup.addParticipant(participant2);
-        assertFalse(studyGroup.addParticipant(new User(4, "Participant3", "participant3@example.com", "student", "participant3.jpg")));
+        assertFalse(studyGroup.addParticipant(participant));
         assertEquals(2, studyGroup.getParticipants().size());
     }
 
     // Test removing a participant from the study group
-    @Test
-    void testRemoveParticipant() {
-        studyGroup.addParticipant(participant1);
-        assertTrue(studyGroup.removeParticipant(participant1));
+    @ParameterizedTest
+    @CsvSource({
+            "1, participant1@example.com",
+            "2, participant2@example.com"
+    })
+    void testRemoveParticipant(int userId, String email) {
+        User participant = new User(userId, "Participant", email, "student", "participant.jpg");
+        studyGroup.addParticipant(participant);
+        assertTrue(studyGroup.removeParticipant(participant));
         assertEquals(0, studyGroup.getParticipants().size());
     }
 
     // Test adding a participant to the waitlist
-    @Test
-    void testAddToWaitlist() {
+    @ParameterizedTest
+    @CsvSource({
+            "1, participant1@example.com",
+            "2, participant2@example.com",
+            "3, participant3@example.com"
+    })
+    void testAddToWaitlist(int userId, String email) {
+        User participant = new User(userId, "Participant", email, "student", "participant.jpg");
         studyGroup.addParticipant(participant1);
         studyGroup.addParticipant(participant2);
-        studyGroup.addToWaitlist(new User(4, "Participant3", "participant3@example.com", "student", "participant3.jpg"));
+        studyGroup.addToWaitlist(participant);
         assertEquals(1, studyGroup.getWaitlist().size());
     }
 
     // Test removing a participant from the waitlist
-    @Test
-    void testRemoveFromWaitlist() {
-        User participant3 = new User(4, "Participant3", "participant3@example.com", "student", "participant3.jpg");
+    @ParameterizedTest
+    @CsvSource({
+            "1, participant1@example.com",
+            "2, participant2@example.com",
+            "3, participant3@example.com"
+    })
+    void testRemoveFromWaitlist(int userId, String email) {
+        User participant = new User(userId, "Participant", email, "student", "participant.jpg");
         studyGroup.addParticipant(participant1);
         studyGroup.addParticipant(participant2);
-        studyGroup.addToWaitlist(participant3);
-        assertTrue(studyGroup.removeFromWaitlist(participant3));
+        studyGroup.addToWaitlist(participant);
+        assertTrue(studyGroup.removeFromWaitlist(participant));
         assertEquals(0, studyGroup.getWaitlist().size());
     }
 
-    // Test if the study group is full
-    @Test
-    void testIsFull() {
-        studyGroup.addParticipant(participant1);
-        studyGroup.addParticipant(participant2);
-        assertTrue(studyGroup.isFull());
+    // Test whether the study group is full based on the number of participants
+    @ParameterizedTest
+    @CsvSource({
+            "0, false",
+            "1, false",
+            "2, true"
+    })
+    void testIsFull(int numberOfParticipants, boolean expectedIsFull) {
+        // Add a specified number of participants to the study group
+        for (int i = 0; i < numberOfParticipants; i++) {
+            User participant = new User(i + 10, "Participant" + i, "participant" + i + "@example.com", "student", "participant" + i + ".jpg");
+            studyGroup.addParticipant(participant);
+        }
+        // Check whether the study group is full based on the expected value
+        assertEquals(expectedIsFull, studyGroup.isFull());
     }
 }
+
+
+
